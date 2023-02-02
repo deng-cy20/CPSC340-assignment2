@@ -244,7 +244,6 @@ def q4_2():
 def q4_3():
     X = load_dataset("clusterData2.pkl")["X"]
     """YOUR CODE HERE FOR Q4.3"""
-    test
 
 
 if __name__ == "__main__":
