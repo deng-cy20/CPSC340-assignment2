@@ -1,6 +1,7 @@
 from random_stump import RandomStumpInfoGain
 from decision_tree import DecisionTree
 import numpy as np
+import statistics as stats
 
 import utils
 
@@ -21,9 +22,35 @@ class RandomTree(DecisionTree):
 
 
 class RandomForest:
-    """
-    YOUR CODE HERE FOR Q3
-    Hint: start with the constructor __init__(), which takes the hyperparameters.
-    Hint: you can instantiate objects inside fit().
-    Make sure predict() is able to handle multiple examples.
-    """
+    num_trees = None
+    max_depth = None
+    trees = None
+    y_matrix = None
+
+    def __init__(self, num_trees, max_depth):
+        self.num_trees = num_trees
+        self.max_depth = max_depth
+
+    def fit(self, X, y):
+        self.trees = []
+        for i in range(self.num_trees):
+            new_tree = RandomTree(self.max_depth)
+            new_tree.fit(X, y)
+            self.trees.append(new_tree)
+
+    def predict(self, X):
+        rows = len(X)
+        self.y_matrix = []
+        for tree in self.trees:
+            curr_tree_y_values = tree.predict(X)
+            self.y_matrix.append(curr_tree_y_values)
+
+        y = np.zeros(rows)
+        for i in range(rows):
+            all_y_values = []
+            for y_row in self.y_matrix:
+                all_y_values.append(y_row[i])
+            y[i] = stats.mode(all_y_values)
+
+        self.y_matrix = None
+        return y

@@ -20,8 +20,6 @@ from sklearn.tree import DecisionTreeClassifier
 # for imports and for simplicity with relative paths
 os.chdir(Path(__file__).parent.resolve())
 
-# our code
-
 
 @handle("1.2")
 def q1_2():
@@ -34,6 +32,16 @@ def q1_2():
     groupnames = dataset["groupnames"]
     wordlist = dataset["wordlist"]
     """YOUR CODE HERE FOR Q1.2"""
+    print(wordlist[72])
+    print(len(wordlist))
+    print(wordlist)
+    for i in range(len(X[802])):
+        if X[802][i]:
+            print("missing", wordlist[i])
+    print(X[802])
+
+    print(groupnames)
+    print(y[802])
 
 
 @handle("1.3")
@@ -177,10 +185,16 @@ def q3():
         print(f"    Training error: {tr_error:.3f}")
         print(f"    Testing error: {te_error:.3f}")
 
-    print("Decision tree info gain")
-    evaluate_model(
-        DecisionTree(max_depth=np.inf, stump_class=DecisionStumpInfoGain))
     """YOUR CODE FOR Q3"""
+    print("Random tree info gain")
+    evaluate_model(RandomTree(max_depth=np.inf))
+
+    print("Decision tree info gain")
+    evaluate_model(DecisionTree(max_depth=np.inf,
+                   stump_class=DecisionStumpInfoGain))
+
+    print("Random forest info gain")
+    evaluate_model(RandomForest(num_trees=50, max_depth=np.inf))
 
 
 @handle("4")
