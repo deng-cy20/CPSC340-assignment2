@@ -136,7 +136,7 @@ def q2_2():
         test_acc[num] = np.sum(test_hat == y_test) / y_test.size
         knn2_2.fit(X, y)
         train_hat = knn2_2.predict(X)
-        train_err[num] = 1 - np.sum(train_hat == y)/y.size
+        train_err[num] = 1 - np.sum(train_hat == y) / y.size
         num = num + 1
     plt.plot(ks, cv_accs)
     plt.plot(ks, test_acc)
@@ -206,7 +206,7 @@ def q4_1():
     low_err = np.inf
     for i in range(50):
         model.fit(X)
-        if(model.err < low_err):
+        if (model.err < low_err):
             best_model = model
             low_err = model.err
     print(f"Lowest Error Obtained: {low_err}")
@@ -230,7 +230,7 @@ def q4_2():
         low_err = np.inf
         for i in range(50):
             model.fit(X)
-            if(model.err < low_err):
+            if (model.err < low_err):
                 low_err = model.err
         errs[num] = low_err
         num = num + 1
@@ -244,6 +244,7 @@ def q4_2():
 def q4_3():
     X = load_dataset("clusterData2.pkl")["X"]
     """YOUR CODE HERE FOR Q4.3"""
+    test
 
 
 if __name__ == "__main__":
