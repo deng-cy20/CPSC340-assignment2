@@ -2,7 +2,7 @@ import numpy as np
 from utils import euclidean_dist_squared
 
 
-class Kmeans:
+class Kmedians:
     means = None
 
     def __init__(self, k):
@@ -18,11 +18,18 @@ class Kmeans:
             means[kk] = X[i]
 
         while True:
-            # iterations of k-means
+            # iterations of k-medians
             y_old = y
 
-            # Compute euclidean distance to each mean
-            distance_matrix = euclidean_dist_squared(X, means)
+            # Compute L1 norm to each mean
+            n, d = X.shape
+            T, d = means.shape
+            distance_matrix = np.zeros([n, T])
+            for i in range(n):
+                for j in range(T):
+                    distance_matrix[i, j] = abs(X[i, 0] -
+                                                means[j, 0]) + abs(X[i, 1] -
+                                                                   means[j, 1])
             distance_matrix[np.isnan(distance_matrix)] = np.inf
             y = np.argmin(distance_matrix, axis=1)
 
@@ -31,7 +38,7 @@ class Kmeans:
                 if np.any(
                         y == kk
                 ):  # don't update the mean if no examples are assigned to it (one of several possible approaches)
-                    means[kk] = X[y == kk].mean(axis=0)
+                    means[kk] = np.median(X[y == kk], axis=0)
 
             changes = np.sum(y != y_old)
             # print('Running K-means, changes in cluster assignment = {}'.format(changes))
@@ -46,7 +53,14 @@ class Kmeans:
 
     def predict(self, X_hat):
         means = self.means
-        distance_matrix = euclidean_dist_squared(X_hat, means)
+        n, d = X_hat.shape
+        T, d = means.shape
+        distance_matrix = np.zeros([n, T])
+        for i in range(n):
+            for j in range(T):
+                distance_matrix[i, j] = abs(X_hat[i, 0] -
+                                            means[j, 0]) + abs(X_hat[i, 1] -
+                                                               means[j, 1])
         distance_matrix[np.isnan(distance_matrix)] = np.inf
         return np.argmin(distance_matrix, axis=1)
 

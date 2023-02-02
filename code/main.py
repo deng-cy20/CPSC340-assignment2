@@ -3,6 +3,7 @@ from random_tree import RandomForest, RandomTree
 from naive_bayes import NaiveBayes
 from knn import KNN
 from kmeans import Kmeans
+from kmedians import Kmedians
 from decision_tree import DecisionTree
 from decision_stump import DecisionStumpInfoGain
 from utils import load_dataset, plot_classifier, handle, run, main
@@ -190,8 +191,8 @@ def q3():
     evaluate_model(RandomTree(max_depth=np.inf))
 
     print("Decision tree info gain")
-    evaluate_model(DecisionTree(max_depth=np.inf,
-                   stump_class=DecisionStumpInfoGain))
+    evaluate_model(
+        DecisionTree(max_depth=np.inf, stump_class=DecisionStumpInfoGain))
 
     print("Random forest info gain")
     evaluate_model(RandomForest(num_trees=50, max_depth=np.inf))
@@ -258,6 +259,72 @@ def q4_2():
 def q4_3():
     X = load_dataset("clusterData2.pkl")["X"]
     """YOUR CODE HERE FOR Q4.3"""
+    model = Kmeans(k=4)
+    low_err = np.inf
+    best_model = None
+    for i in range(50):
+        model.fit(X)
+        if (model.err < low_err):
+            low_err = model.err
+            best_model = model
+    y = best_model.predict(X)
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap="jet")
+
+    fname = Path("..", "figs", "kmeans_4_3_lowest.png")
+    plt.savefig(fname)
+    print(f"Figure saved as {fname}")
+
+    ks = list(range(1, 11))
+    errs = np.zeros(10)
+    num = 0
+    for k in ks:
+        model = Kmeans(k)
+        low_err = np.inf
+        for i in range(50):
+            model.fit(X)
+            if (model.err < low_err):
+                low_err = model.err
+        errs[num] = low_err
+        num = num + 1
+    plt.figure()
+    plt.plot(ks, errs)
+    fname = Path("..", "figs", "kmeans_4_3_elbow.png")
+    plt.savefig(fname)
+    print(f"Figure saved as {fname}")
+
+    ks = list(range(1, 11))
+    errs = np.zeros(10)
+    num = 0
+    for k in ks:
+        model = Kmeans(k)
+        low_err = np.inf
+        for i in range(50):
+            model.fit(X)
+            if (model.errL1 < low_err):
+                low_err = model.errL1
+        errs[num] = low_err
+        num = num + 1
+    plt.figure()
+    plt.plot(ks, errs)
+    fname = Path("..", "figs", "kmeans_4_3_elbowL1.png")
+    plt.savefig(fname)
+    print(f"Figure saved as {fname}")
+
+    plt.figure()
+    model = Kmedians(k=4)
+    low_err = np.inf
+    best_model = None
+    for i in range(50):
+        model.fit(X)
+        if (model.errL1 < low_err):
+            low_err = model.errL1
+            best_model = model
+    y = best_model.predict(X)
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap="jet")
+
+    fname = Path("..", "figs", "kmedians_4_3_lowest.png")
+    plt.savefig(fname)
+    print(f"Figure saved as {fname}")
 
 
 if __name__ == "__main__":
