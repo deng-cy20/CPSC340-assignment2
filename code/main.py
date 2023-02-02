@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from random_tree import RandomForest, RandomTree
-from naive_bayes import NaiveBayes, NaiveBayesLaplace
+from naive_bayes import NaiveBayes
 from knn import KNN
 from kmeans import Kmeans
 from decision_tree import DecisionTree
